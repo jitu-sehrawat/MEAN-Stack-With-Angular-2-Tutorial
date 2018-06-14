@@ -13,10 +13,10 @@ mongoose.connect(config.uri, (err) => {
   }
 });
 
-app.use(express.static(__dirname + `/client/dist/`));
+app.use(express.static(__dirname + `/client/dist/client/`));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + `/client/dist/index.html`));
+  res.sendFile(path.join(__dirname + `/client/dist/client/index.html`));
 });
 
 // hhtp://localhost:8000/
