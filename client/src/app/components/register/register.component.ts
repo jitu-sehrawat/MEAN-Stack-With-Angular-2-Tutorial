@@ -10,20 +10,73 @@ export class RegisterComponent implements OnInit {
 
   form: FormGroup;
 
-  createForm() {
-    this.form = this.formBuilder.group({
-      email: '',
-      username: '',
-      password: '',
-      confirm: ''
-    })
-  }
-
   constructor(
     private formBuilder: FormBuilder
   ) { 
     this.createForm();
   }
+
+  createForm() {
+    this.form = this.formBuilder.group({
+      email: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(30),
+        this.validateEmail
+      ])],
+      username: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(15),
+        this.validateUsername
+      ])],
+      password: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(16),
+        this.validatePassword
+      ])],
+      confirm: ['', Validators.required]
+    }, {
+      validator: this.matchingPasswords
+    });
+  }
+
+  validateEmail(controls) {
+    const regExp = new RegExp(/^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/);
+    if(regExp.test(controls.value)) {
+      return null;
+    } else {
+      return { 'validateEmail': true }
+    }
+  }
+
+  validateUsername(controls) {
+    const regExp = new RegExp(/^[a-zA-Z0-9]+$/);
+    if(regExp.test(controls.value)) {
+      return null;
+    } else {
+      return { 'validateUsername': true }
+    }
+  }
+
+  validatePassword(controls) {
+    const regExp = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{4,16}/);
+    if(regExp.test(controls.value)) {
+      return null;
+    } else {
+      return { 'validatePassword': true }
+    }
+  }
+
+  matchingPasswords(group: FormGroup) {
+    return group.controls['password'].value === group.controls['confirm'].value ? null : {'matchingPasswords': true};
+  }
+
+  onRegisterSubmit() {
+    console.log("Form Submitted");
+  }
+
 
   ngOnInit() {
   }
