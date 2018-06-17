@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const config = require('./config/database')
 const authentication = require('./routes/authentication')(router);
+const cors = require('cors');
 
 // Database Connection
 const mongoose = require('mongoose');
@@ -17,6 +18,10 @@ mongoose.connect(config.uri, (err) => {
   }
 });
 
+// Middleware
+ app.use(cors({
+  origin: 'http://localhost:4200'
+ }));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + `/client/dist/client/`));

@@ -55,5 +55,43 @@ module.exports = (router) => {
     }
   });
 
+  // Check Email availablity
+  router.get('/checkEmail/:email', (req, res) => {
+    if(!req.params.email) {
+      res.send({success: false, message:'E-mail not provided'});
+    } else {
+      User.findOne({email: req.params.email}, (err, user) => {
+        if(err) {
+          res.send({ success:false, message:err})
+        } else {
+          if(user) {
+            res.send({ success:false, message: 'Email is already taken'});
+          } else {
+            res.send({ success: true, message: 'Email is available'})
+          }
+        }
+      })
+    }
+  })
+
+  // Check username availablity
+  router.get('/checkUsername/:username', (req, res) => {
+    if(!req.params.username) {
+      res.send({success: false, message:'username not provided'});
+    } else {
+      User.findOne({username: req.params.username}, (err, user) => {
+        if(err) {
+          res.send({ success:false, message:err})
+        } else {
+          if(user) {
+            res.send({ success:false, message: 'Username is already taken'});
+          } else {
+            res.send({ success: true, message: 'Username is available'})
+          }
+        }
+      })
+    }
+  })
+
   return router;
 };
